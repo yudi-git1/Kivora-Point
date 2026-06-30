@@ -1,5 +1,5 @@
 // ============================================
-// FILE: app/routes/kontak.tsx - DENGAN EMAIL JS
+// FILE: app/routes/kontak.tsx - DENGAN EMAIL JS + SOSMED FIX
 // ============================================
 
 import { createFileRoute } from "@tanstack/react-router";
@@ -25,6 +25,34 @@ import {
 export const Route = createFileRoute("/kontak")({
   component: KontakPage,
 });
+
+// 🔥 SOCIAL MEDIA LINKS - SAMA DENGAN FOOTER
+const socialLinks = [
+  {
+    icon: Instagram,
+    label: "Instagram",
+    href: "https://instagram.com/kivorapoint.id",
+    color: "hover:text-pink-500",
+  },
+  {
+    icon: Twitter,
+    label: "Twitter",
+    href: "https://twitter.com/kivorapoint",
+    color: "hover:text-sky-400",
+  },
+  {
+    icon: Youtube,
+    label: "YouTube",
+    href: "https://youtube.com/@kivorapoint",
+    color: "hover:text-red-500",
+  },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp Channel",
+    href: "https://whatsapp.com/channel/0029vb8vop07dawsymeqsu2b",
+    color: "hover:text-green-400",
+  },
+];
 
 function KontakPage() {
   const { settings } = useSettings();
@@ -148,20 +176,27 @@ function KontakPage() {
               </div>
             </div>
 
+            {/* ================= SOCIAL MEDIA - FIXED ================= */}
             <div className="glass-card rounded-2xl p-6">
               <h3 className="font-display text-sm font-semibold mb-4">
                 Follow Kami
               </h3>
-              <div className="flex gap-3">
-                {[Instagram, Twitter, Youtube, MessageCircle].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface/50 text-muted-foreground hover:text-foreground hover:border-primary/50 transition"
-                  >
-                    <Icon className="h-5 w-5" />
-                  </a>
-                ))}
+              <div className="flex flex-wrap gap-3">
+                {socialLinks.map((social, i) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={i}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className={`grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:scale-105 hover:text-foreground ${social.color}`}
+                    >
+                      <Icon className="h-5 w-5" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
