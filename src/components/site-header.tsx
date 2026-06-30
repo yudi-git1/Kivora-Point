@@ -1,5 +1,5 @@
 // ============================================
-// FILE: components/site-header.tsx - FIXED
+// FILE: components/site-header.tsx - FIXED ANDROID
 // ============================================
 
 import { Link } from "@tanstack/react-router";
@@ -21,7 +21,7 @@ import {
   Flame,
   Gem,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSettings } from "@/components/SettingsProvider";
 
 interface SiteHeaderProps {
@@ -49,12 +49,22 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isSettingReady, setIsSettingReady] = useState(false);
   const { settings } = useSettings();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const name = storeName || settings?.store_name || "Kivora Point";
   const logo = logoUrl || settings?.logo_url || "";
   const whatsappNumber = whatsapp || settings?.whatsapp || "";
 
+  // ⭐ Tandai settings udah siap
+  useEffect(() => {
+    if (settings) {
+      setIsSettingReady(true);
+    }
+  }, [settings]);
+
+  // ⭐ Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -64,16 +74,29 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ⭐ Close menu kalau klik di luar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ⭐ Toggle menu dengan aman
   const toggleMobileMenu = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  // ⭐ Tutup menu
   const closeMobileMenu = () => {
     setMobileOpen(false);
   };
@@ -215,7 +238,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               <span className="hidden xl:inline">Atas</span>
             </button>
 
-            {/* ⭐ MOBILE MENU TOGGLE - FIXED ⭐ */}
+            {/* MOBILE MENU TOGGLE */}
             <button
               onClick={toggleMobileMenu}
               className="lg:hidden grid h-10 w-10 place-items-center rounded-xl border border-border bg-surface/70 text-foreground transition-all duration-300 hover:border-primary/60 hover:bg-surface hover:scale-105"
@@ -239,10 +262,13 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* ⭐ MOBILE MENU - FIXED ⭐ */}
+      {/* MOBILE MENU - FIXED WITH REF */}
       {mobileOpen && (
-        <nav className="lg:hidden border-t border-border/60 bg-background/95 backdrop-blur animate-in slide-in-from-top-5 duration-300">
-          <div className="mx-auto max-w-6xl px-4 py-3 space-y-1">
+        <div
+          ref={menuRef}
+          className="lg:hidden border-t border-border/60 bg-background/95 backdrop-blur"
+        >
+          <nav className="mx-auto max-w-6xl px-4 py-3 space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -304,8 +330,8 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
                 <Phone className="h-4 w-4" /> Hubungi WhatsApp
               </a>
             )}
-          </div>
-        </nav>
+          </nav>
+        </div>
       )}
     </header>
   );
