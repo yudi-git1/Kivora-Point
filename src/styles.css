@@ -1,7 +1,15 @@
-@import "tailwindcss" source(none);
-@source "../src";
+/* ============================================
+   FILE: src/styles.css - LENGKAP & BENER
+   ============================================ */
+
+/* ⭐ IMPORT HARUS DI PALING ATAS ⭐ */
+@import "tailwindcss";
 @import "tw-animate-css";
 
+/* ⭐ @source DI BAWAH IMPORT ⭐ */
+@source "../src";
+
+/* ⭐ CUSTOM VARIANTS ⭐ */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -46,9 +54,9 @@
   --radius: 0.875rem;
 
   /* Brand */
-  --background: oklch(0.205 0.04 265);          /* #0F172A dark navy */
-  --foreground: oklch(0.985 0 0);                /* white */
-  --surface: oklch(0.255 0.04 265);              /* #1E293B card */
+  --background: oklch(0.205 0.04 265);
+  --foreground: oklch(0.985 0 0);
+  --surface: oklch(0.255 0.04 265);
   --surface-elevated: oklch(0.295 0.045 265);
 
   --card: oklch(0.255 0.04 265);
@@ -56,13 +64,13 @@
   --popover: oklch(0.255 0.04 265);
   --popover-foreground: oklch(0.985 0 0);
 
-  --primary: oklch(0.58 0.24 295);               /* #7C3AED neon purple */
+  --primary: oklch(0.58 0.24 295);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.72 0.15 215);             /* #06B6D4 cyan */
+  --secondary: oklch(0.72 0.15 215);
   --secondary-foreground: oklch(0.15 0.02 265);
 
   --muted: oklch(0.295 0.04 265);
-  --muted-foreground: oklch(0.72 0.03 255);      /* #94A3B8 */
+  --muted-foreground: oklch(0.72 0.03 255);
   --accent: oklch(0.72 0.15 215);
   --accent-foreground: oklch(0.15 0.02 265);
   --destructive: oklch(0.62 0.22 25);
@@ -109,12 +117,10 @@
     letter-spacing: -0.02em; 
   }
 
-  /* ================= SMOOTH SCROLL ================= */
   html {
     scroll-behavior: smooth;
   }
 
-  /* ================= SELECTION ================= */
   ::selection {
     background: oklch(0.58 0.24 295 / 0.3);
     color: white;
@@ -147,6 +153,7 @@
   border: 1px solid oklch(0.58 0.24 295 / 0.35);
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
+
 @utility neon-border-hover {
   &:hover {
     border-color: oklch(0.72 0.15 215 / 0.7);
