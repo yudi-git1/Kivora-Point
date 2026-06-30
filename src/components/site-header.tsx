@@ -1,6 +1,5 @@
 // ============================================
-// FILE: components/site-header.tsx
-// HEADER SAMA UNTUK SEMUA HALAMAN - TANPA EMOJI
+// FILE: components/site-header.tsx - FIXED
 // ============================================
 
 import { Link } from "@tanstack/react-router";
@@ -19,7 +18,6 @@ import {
   ChevronDown,
   ArrowUp,
   Crown,
-  Sparkles as SparklesIcon,
   Flame,
   Gem,
 } from "lucide-react";
@@ -39,7 +37,6 @@ const menuItems = [
   { label: "Kontak", href: "/kontak", icon: Mail },
 ];
 
-// 🔥 KATEGORI UNTUK DROPDOWN - TANPA EMOJI
 const categories = [
   { label: "Mythic", href: "/stock?category=mythic", icon: Crown },
   { label: "Legend", href: "/stock?category=legend", icon: Flame },
@@ -69,6 +66,16 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // ⭐ Toggle menu dengan aman
+  const toggleMobileMenu = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  // ⭐ Tutup menu
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
   };
 
   return (
@@ -109,6 +116,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
           <Link
             to="/"
             className="group flex items-center gap-3 shrink-0 transition-all duration-300 hover:scale-105"
+            onClick={closeMobileMenu}
           >
             {logo ? (
               <img
@@ -164,7 +172,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               />
             </div>
 
-            {/* KATEGORI DROPDOWN - TANPA EMOJI */}
+            {/* KATEGORI DROPDOWN */}
             <div className="relative hidden lg:block">
               <button
                 onClick={() => setCategoryOpen(!categoryOpen)}
@@ -207,10 +215,11 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               <span className="hidden xl:inline">Atas</span>
             </button>
 
-            {/* MOBILE MENU TOGGLE */}
+            {/* ⭐ MOBILE MENU TOGGLE - FIXED ⭐ */}
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
+              onClick={toggleMobileMenu}
               className="lg:hidden grid h-10 w-10 place-items-center rounded-xl border border-border bg-surface/70 text-foreground transition-all duration-300 hover:border-primary/60 hover:bg-surface hover:scale-105"
+              aria-label="Toggle menu"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -230,7 +239,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
+      {/* ⭐ MOBILE MENU - FIXED ⭐ */}
       {mobileOpen && (
         <nav className="lg:hidden border-t border-border/60 bg-background/95 backdrop-blur animate-in slide-in-from-top-5 duration-300">
           <div className="mx-auto max-w-6xl px-4 py-3 space-y-1">
@@ -240,7 +249,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
                 <Link
                   key={item.label}
                   to={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={closeMobileMenu}
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-accent/10 hover:translate-x-1"
                   activeProps={{
                     className: "bg-primary/10 text-primary",
@@ -252,7 +261,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               );
             })}
 
-            {/* MOBILE CATEGORIES - TANPA EMOJI */}
+            {/* MOBILE CATEGORIES */}
             <div className="pt-2 border-t border-border/40">
               <p className="px-3 py-1 text-xs text-muted-foreground">Kategori</p>
               {categories.map((cat) => {
@@ -261,7 +270,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
                   <Link
                     key={cat.label}
                     to={cat.href}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-accent/10 hover:text-foreground transition"
                   >
                     <Icon className="h-4 w-4" />
@@ -275,7 +284,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
             <button
               onClick={() => {
                 scrollToTop();
-                setMobileOpen(false);
+                closeMobileMenu();
               }}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-muted-foreground hover:bg-accent/10 transition"
             >
@@ -289,6 +298,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
                 href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={closeMobileMenu}
                 className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-green-700 hover:scale-[1.02]"
               >
                 <Phone className="h-4 w-4" /> Hubungi WhatsApp
