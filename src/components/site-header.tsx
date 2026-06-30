@@ -49,7 +49,6 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [isSettingReady, setIsSettingReady] = useState(false);
   const { settings } = useSettings();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -57,14 +56,6 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
   const logo = logoUrl || settings?.logo_url || "";
   const whatsappNumber = whatsapp || settings?.whatsapp || "";
 
-  // ⭐ Tandai settings udah siap
-  useEffect(() => {
-    if (settings) {
-      setIsSettingReady(true);
-    }
-  }, [settings]);
-
-  // ⭐ Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -74,7 +65,6 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ⭐ Close menu kalau klik di luar
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -109,7 +99,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
           : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-      {/* TOP BAR */}
+      {/* TOP BAR - HIDE DI MOBILE */}
       <div className="hidden lg:block bg-primary/5 border-b border-border/40 transition-all duration-300">
         <div className="mx-auto max-w-6xl px-4 py-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
           <div className="flex items-center gap-4">
@@ -133,30 +123,42 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
       </div>
 
       {/* MAIN HEADER */}
-      <div className="mx-auto max-w-6xl px-4 py-3">
-        <div className="flex items-center justify-between gap-4">
-          {/* LOGO */}
+      <div className="mx-auto max-w-6xl px-4 py-2 sm:py-3">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
+          {/* LOGO - TETAP KELIHATAN DI MOBILE */}
           <Link
             to="/"
-            className="group flex items-center gap-3 shrink-0 transition-all duration-300 hover:scale-105"
+            className="group flex items-center gap-2 sm:gap-3 shrink-0 transition-all duration-300 hover:scale-105"
             onClick={closeMobileMenu}
           >
             {logo ? (
               <img
                 src={logo}
                 alt={name}
-                className="h-9 w-9 rounded-xl object-cover border border-border/40 transition-all duration-300 group-hover:shadow-neon"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl object-cover border border-border/40 transition-all duration-300 group-hover:shadow-neon"
               />
             ) : (
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand shadow-neon transition-all duration-300 group-hover:shadow-2xl group-hover:scale-110">
-                <Sparkles className="h-4 w-4 text-white" />
+              <span className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-xl bg-gradient-brand shadow-neon transition-all duration-300 group-hover:shadow-2xl group-hover:scale-110">
+                <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
               </span>
             )}
-            <div className="hidden sm:block">
-              <span className="font-display text-base font-bold tracking-tight transition-colors duration-300 group-hover:text-primary">
+            
+            {/* ⭐ NAMA TETAP KELIHATAN DI MOBILE - UKURAN LEBIH KECIL SAAT SCROLL ⭐ */}
+            <div className="flex flex-col">
+              <span 
+                className={`font-display font-bold tracking-tight transition-all duration-300 ${
+                  scrolled 
+                    ? "text-sm sm:text-base" 
+                    : "text-base sm:text-lg"
+                } text-foreground group-hover:text-primary`}
+              >
                 {name}
               </span>
-              <span className="block text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+              <span 
+                className={`text-[8px] sm:text-[9px] uppercase tracking-[0.18em] text-muted-foreground transition-all duration-300 ${
+                  scrolled ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto"
+                }`}
+              >
                 Gaming Marketplace
               </span>
             </div>
@@ -184,8 +186,8 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
           </nav>
 
           {/* RIGHT SIDE */}
-          <div className="flex items-center gap-2">
-            {/* SEARCH */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* SEARCH - HIDE DI MOBILE, TAPI TETAP ADA ICON SEARCH */}
             <div className="hidden lg:flex items-center gap-2 rounded-lg border border-border bg-surface/70 px-3 py-1.5 transition-all duration-300 focus-within:border-primary/70 focus-within:shadow-neon">
               <Search className="h-4 w-4 text-muted-foreground" />
               <input
@@ -195,7 +197,12 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               />
             </div>
 
-            {/* KATEGORI DROPDOWN */}
+            {/* SEARCH ICON MOBILE */}
+            <button className="lg:hidden grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl border border-border bg-surface/70 text-muted-foreground transition-all duration-300 hover:border-primary/60 hover:text-foreground">
+              <Search className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+
+            {/* KATEGORI DROPDOWN - HIDE DI MOBILE */}
             <div className="relative hidden lg:block">
               <button
                 onClick={() => setCategoryOpen(!categoryOpen)}
@@ -226,7 +233,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
               )}
             </div>
 
-            {/* BACK TO TOP */}
+            {/* BACK TO TOP - HIDE DI MOBILE */}
             <button
               onClick={scrollToTop}
               className={`hidden lg:flex items-center gap-1.5 rounded-lg border border-border bg-surface/70 px-3 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:border-primary/60 hover:bg-surface hover:scale-105 ${
@@ -241,16 +248,16 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
             {/* MOBILE MENU TOGGLE */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden grid h-10 w-10 place-items-center rounded-xl border border-border bg-surface/70 text-foreground transition-all duration-300 hover:border-primary/60 hover:bg-surface hover:scale-105"
+              className="lg:hidden grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl border border-border bg-surface/70 text-foreground transition-all duration-300 hover:border-primary/60 hover:bg-surface hover:scale-105"
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5" />}
             </button>
           </div>
         </div>
 
-        {/* MOBILE SEARCH */}
-        <div className="lg:hidden mt-3">
+        {/* MOBILE SEARCH - HIDE, PAKE ICON SEARCH AJA */}
+        <div className="lg:hidden mt-2 hidden">
           <label className="relative block transition-all duration-300 focus-within:scale-[1.01]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -262,7 +269,7 @@ export function SiteHeader({ storeName, logoUrl, whatsapp }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* MOBILE MENU - FIXED WITH REF */}
+      {/* MOBILE MENU */}
       {mobileOpen && (
         <div
           ref={menuRef}
