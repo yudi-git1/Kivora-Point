@@ -1,5 +1,5 @@
 // ============================================
-// FILE: app/routes/kontak.tsx - DENGAN EMAIL JS + SOSMED FIX
+// FILE: app/routes/kontak.tsx - DENGAN EMAIL JS + SOSMED SAMA FOOTER
 // ============================================
 
 import { createFileRoute } from "@tanstack/react-router";
@@ -12,8 +12,6 @@ import {
   Phone,
   Mail,
   Instagram,
-  Twitter,
-  Youtube,
   MessageCircle,
   Clock,
   Send,
@@ -26,6 +24,20 @@ export const Route = createFileRoute("/kontak")({
   component: KontakPage,
 });
 
+// 🔥 ICON TIKTOK (SVG) - SAMA KAYAK FOOTER
+function TikTokIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-2.84 3.37-2.22V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.89a7.06 7.06 0 0 0 4.3 1.38V8.29c-1.63 0-3.11-.83-3.93-2.47z"/>
+    </svg>
+  );
+}
+
 // 🔥 SOCIAL MEDIA LINKS - SAMA DENGAN FOOTER
 const socialLinks = [
   {
@@ -35,16 +47,10 @@ const socialLinks = [
     color: "hover:text-pink-500",
   },
   {
-    icon: Twitter,
-    label: "Twitter",
-    href: "https://twitter.com/kivorapoint",
-    color: "hover:text-sky-400",
-  },
-  {
-    icon: Youtube,
-    label: "YouTube",
-    href: "https://youtube.com/@kivorapoint",
-    color: "hover:text-red-500",
+    icon: TikTokIcon,
+    label: "TikTok",
+    href: "https://www.tiktok.com/@kivorapoint.id?_r=1&_t=zs-97urtpzht6o",
+    color: "hover:text-white",
   },
   {
     icon: MessageCircle,
@@ -176,12 +182,12 @@ function KontakPage() {
               </div>
             </div>
 
-            {/* ================= SOCIAL MEDIA - FIXED ================= */}
+            {/* ================= SOCIAL MEDIA - SAMA KAYAK FOOTER ================= */}
             <div className="glass-card rounded-2xl p-6">
               <h3 className="font-display text-sm font-semibold mb-4">
                 Follow Kami
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex gap-3">
                 {socialLinks.map((social, i) => {
                   const Icon = social.icon;
                   return (
@@ -191,7 +197,7 @@ function KontakPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className={`grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:scale-105 hover:text-foreground ${social.color}`}
+                      className={`grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:scale-105 ${social.color}`}
                     >
                       <Icon className="h-5 w-5" />
                     </a>
